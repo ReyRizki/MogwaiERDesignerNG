@@ -442,6 +442,11 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
         zoomOutAction = new DefaultAction(
                 e -> zoomOut(), this, ERDesignerBundle.ZOOMOUT);
 
+        zoomInAction.putValue(DefaultAction.HOTKEY_KEY, KeyStroke
+                .getKeyStroke(KeyEvent.VK_EQUALS, KeyEvent.CTRL_DOWN_MASK));
+        zoomOutAction.putValue(DefaultAction.HOTKEY_KEY, KeyStroke
+                .getKeyStroke(KeyEvent.VK_MINUS, KeyEvent.CTRL_DOWN_MASK));
+
         DefaultAction theGenerateSQL = new DefaultAction(
                 new GenerateSQLCommand(), this,
                 ERDesignerBundle.GENERATECREATEDBDDL);
