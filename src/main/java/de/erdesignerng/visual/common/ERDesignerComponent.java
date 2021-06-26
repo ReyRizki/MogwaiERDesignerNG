@@ -108,7 +108,7 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
     private DefaultAction zoomOutAction;
 
     private static final ZoomInfo ZOOMSCALE_HUNDREDPERCENT = new ZoomInfo(
-            "100%", 1);
+            "150%", 1.5);
 
     private DefaultAction handAction;
 
@@ -730,7 +730,7 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
 
         DefaultComboBoxModel theZoomModel = new DefaultComboBoxModel();
         theZoomModel.addElement(ZOOMSCALE_HUNDREDPERCENT);
-        for (int i = 95; i > 0; i -= 5) {
+        for (int i = 145; i > 0; i -= 5) {
             theZoomModel.addElement(new ZoomInfo(i + " %", ((double) i)
                     / (double) 100));
         }
