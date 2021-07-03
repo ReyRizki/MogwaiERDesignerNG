@@ -40,6 +40,8 @@ import de.mogwai.common.i18n.ResourceHelper;
 import de.mogwai.common.i18n.ResourceHelperProvider;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -106,6 +108,10 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
     private DefaultAction zoomInAction;
 
     private DefaultAction zoomOutAction;
+
+    private static JSlider zoomSlider;
+
+    private static JLabel zoomLabel;
 
     private static final ZoomInfo ZOOMSCALE_HUNDREDPERCENT = new ZoomInfo(
             "150%", 1.5);
@@ -739,6 +745,23 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
         zoomBox.setAction(theZoomAction);
         zoomBox.setModel(theZoomModel);
 
+        zoomSlider = new JSlider(0, 29, 29);
+
+        zoomSlider.setPreferredSize(new Dimension(300, 21));
+        zoomSlider.setMaximumSize(new Dimension(300, 21));
+
+        zoomLabel = new JLabel();
+        zoomLabel.setText((zoomSlider.getValue() * 5 + 5) + "%");
+
+        zoomSlider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                zoomBox.setSelectedIndex(29 - zoomSlider.getValue());
+                editor.commandSetZoom((ZoomInfo) zoomBox.getSelectedItem());
+
+                zoomLabel.setText((zoomSlider.getValue() * 5 + 5) + "%");
+            }
+        });
+
         DefaultToolbar theToolBar = worldConnector.getToolBar();
 
         theToolBar.add(theFileMenu);
@@ -751,10 +774,10 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
         theToolBar.add(theLoadAction);
         theToolBar.add(theSaveAsAction);
         theToolBar.addSeparator();
-        theToolBar.add(zoomBox);
-        theToolBar.addSeparator();
-        theToolBar.add(zoomInAction);
         theToolBar.add(zoomOutAction);
+        theToolBar.add(zoomSlider);
+        theToolBar.add(zoomInAction);
+        theToolBar.add(zoomLabel);
         theToolBar.addSeparator();
 
         handButton = new DefaultToggleButton(handAction);
@@ -796,6 +819,7 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
         int theIndex = zoomBox.getSelectedIndex();
         if (theIndex < zoomBox.getItemCount() - 1) {
             theIndex++;
+            zoomSlider.setValue(29 - theIndex);
             zoomBox.setSelectedIndex(theIndex);
             editor.commandSetZoom((ZoomInfo) zoomBox.getSelectedItem());
         }
@@ -805,6 +829,7 @@ public final class ERDesignerComponent implements ResourceHelperProvider {
         int theIndex = zoomBox.getSelectedIndex();
         if (theIndex > 0) {
             theIndex--;
+            zoomSlider.setValue(29 - theIndex);
             zoomBox.setSelectedIndex(theIndex);
             editor.commandSetZoom((ZoomInfo) zoomBox.getSelectedItem());
         }
